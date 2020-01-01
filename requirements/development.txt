@@ -1,2 +1,1 @@
 -r production.txt
-django-debug-toolbar==2.1
