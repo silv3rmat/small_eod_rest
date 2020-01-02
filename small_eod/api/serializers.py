@@ -1,22 +1,22 @@
-from django.contrib.auth.models import Group, User
+
 from rest_framework import serializers
-from api.models import (
+from institution.models import (
     AddressData,
     Institution,
     ExternalIdentifier,
     AdministrativeUnit,
-    Case,
-    Dictionary,
-    UserRef,
-    Tag,
 )
+from case.models import Case, UserRef, Tag
+from dictionary.models import Dictionary
 
+from django.contrib.auth import get_user_model
+User = get_user_model()
 
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = User
-        fields = ['username', 'email', 'id', 'password']
+        fields = '__all__'
         extra_kwargs = {'password': {'write_only': True}}
 
     def create(self, validated_data):
@@ -31,12 +31,6 @@ class AdministrativeUnitSerializer(serializers.ModelSerializer):
         exclude= ['id',]
     # def create(self, validated_data):
     #     return AdministrativeUnit.objects.create(**validated_data)
-
-
-class GroupSerializer(serializers.HyperlinkedModelSerializer):
-    class Meta:
-        model = Group
-        fields = ['url', 'name']
 
 
 class AddressDataSerializer(serializers.HyperlinkedModelSerializer):
