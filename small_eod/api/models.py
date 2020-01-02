@@ -1,54 +1,25 @@
 from django.db import models
-from user.models import MyUser as User
-# from model_utils.models import TimeStampedModel
+from django.contrib.contenttypes.fields import GenericForeignKey
+from django.contrib.contenttypes.models import ContentType
+
+from generic.models import TimestampUserLogModel
 
 
-class Error(models.Model):
-    message = models.CharField(max_length=512)
-    code = models.IntegerField(unique=True)
-
-
-class TagNamespace(models.Model):
+class TagNamespace(TimestampUserLogModel):
     description = models.CharField(max_length=256)
     color = models.CharField(max_length=9, default='0000000000')
-    modifiedOn = models.DateTimeField(auto_now=True)
-    createdOn = models.DateTimeField(auto_now_add=True)
-    createdBy = models.ForeignKey(
-        User,
-        on_delete=models.DO_NOTHING,
-        related_name='tag_createdBy',
-        null=True,
-        blank=True
-    )
-    modifiedBy = models.ForeignKey(
-        User,
-        on_delete=models.DO_NOTHING,
-        related_name='tag_modifiedBy',
-        null=True,
-        blank=True
-    )
 
 
-class Letter(models.Model):
+class Tag(models.Model):
+    limit = models.Q(app_label='case', model='Case') | models.Q(app_label='api', model='Letter')
 
-    class Direction(models.TextChoices):
-        IN = 'IN', 'Received'
-        OUT = 'OUT', 'Sent'
+    tag_field = models.CharField(max_length=256)
+    content_type = models.ForeignKey(
+        ContentType,
+        on_delete=models.CASCADE,
+        limit_choices_to= limit
+    )
+    object_id = models.PositiveIntegerField()
+    content_object = GenericForeignKey('content_type', 'object_id')
 
-    modifiedOn = models.DateTimeField(auto_now=True)
-    createdOn = models.DateTimeField(auto_now_add=True)
-    createdBy = models.ForeignKey(
-        User,
-        on_delete=models.DO_NOTHING,
-        related_name='letter_createdBy',
-        null=True,
-        blank=True
-    )
-    modifiedBy = models.ForeignKey(
-        User,
-        on_delete=models.DO_NOTHING,
-        related_name='letter_modifiedBy',
-        null=True,
-        blank=True
-    )
-    direction = models.TextField(choices=Direction.choices, default=Direction.IN, max_length=3)
+

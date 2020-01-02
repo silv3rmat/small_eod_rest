@@ -1,9 +1,8 @@
 from django.db import models
-from user.models import MyUser as User
-# Create your models here.
-from django.conf import settings
+from generic.models import TimestampUserLogModel
 
-class Dictionary(models.Model):
+
+class Dictionary(TimestampUserLogModel):
     class Types(models.TextChoices):
         WHOSE = "WHOSE", "whose case"
         WSCOPE = "WSCOPE", "Jaki zakres sprawy"
@@ -12,22 +11,6 @@ class Dictionary(models.Model):
         INFOT = "INFOT", "Informacja udzielona w którym momencie"
         STATUS = "STATUS", "Status"
 
-    modifiedOn = models.DateTimeField(auto_now=True)
-    createdOn = models.DateTimeField(auto_now_add=True)
-    createdBy = models.ForeignKey(
-        to=settings.AUTH_USER_MODEL,
-        on_delete=models.DO_NOTHING,
-        related_name='dictionary_createdBy',
-        null=True,
-        blank=True
-    )
-    modifiedBy = models.ForeignKey(
-        to=settings.AUTH_USER_MODEL,
-        on_delete=models.DO_NOTHING,
-        related_name='dictionary_modifiedBy',
-        null=True,
-        blank=True
-    )
     name = models.CharField(max_length=100, choices=Types.choices)
     minItems = models.IntegerField(default=1)
     maxItems = models.IntegerField(default=1)

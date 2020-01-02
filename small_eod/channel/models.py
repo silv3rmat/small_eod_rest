@@ -1,6 +1,5 @@
 from django.db import models
-from django.conf import settings
-# Create your models here.
+from generic.models import TimestampUserLogModel
 
 
 class Required(models.Model):
@@ -14,7 +13,7 @@ class Required(models.Model):
     epuap = models.BooleanField()
 
 
-class Channel(models.Model):
+class Channel(TimestampUserLogModel):
 
     class Name(models.TextChoices):
         FED = 'FED', 'fedrowanie'
@@ -26,22 +25,6 @@ class Channel(models.Model):
         POST = 'POST', 'poczta tradycyjna'
         EPUAP = 'EPUAP', 'epuap'
 
-    modifiedOn = models.DateTimeField(auto_now=True)
-    createdOn = models.DateTimeField(auto_now_add=True)
-    createdBy = models.ForeignKey(
-        to=settings.AUTH_USER_MODEL,
-        on_delete=models.DO_NOTHING,
-        related_name='channel_createdBy',
-        null=True,
-        blank=True
-    )
-    modifiedBy = models.ForeignKey(
-        to=settings.AUTH_USER_MODEL,
-        on_delete=models.DO_NOTHING,
-        related_name='channel_modifiedBy',
-        null=True,
-        blank=True
-    )
     name = models.CharField(
         choices=Name.choices,
         default=Name.EMAIL,

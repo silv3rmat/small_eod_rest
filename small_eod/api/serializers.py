@@ -6,7 +6,8 @@ from institution.models import (
     ExternalIdentifier,
     AdministrativeUnit,
 )
-from case.models import Case, UserRef, Tag
+from case.models import Case, UserRef
+from api.models import Tag
 from dictionary.models import Dictionary
 
 from django.contrib.auth import get_user_model
@@ -24,6 +25,7 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
                                         email=validated_data['email'],
                                         password=validated_data['password'],
                                         )
+
 
 class AdministrativeUnitSerializer(serializers.ModelSerializer):
     class Meta:
