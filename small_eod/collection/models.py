@@ -1,17 +1,12 @@
 from django.db import models
-
-# Create your models here.
-from django.contrib.contenttypes.fields import GenericForeignKey, GenericRelation
+from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
-
-
 
 from generic.models import TimestampUserLogModel
 from channel.models import Channel
 from institution.models import Institution, AddressData
 from case.models import Case
 from files.models import File
-
 
 
 class Letter(TimestampUserLogModel):

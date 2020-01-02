@@ -1,7 +1,6 @@
 from django.db import models
 from generic.models import TimestampUserLogModel
-# Create your models here.
-
+# from teryt_tree.models import JednostkaAdministracyjna
 
 class AddressData(models.Model):
     city = models.CharField(max_length=100)
@@ -35,7 +34,8 @@ class Institution(TimestampUserLogModel):
         blank=True
     )
     administrativeUnit = models.OneToOneField(
-        AdministrativeUnit,
+        # JednostkaAdministracyjna,
+        to=AdministrativeUnit,
         on_delete=models.CASCADE,
         null=True,
         blank=True
