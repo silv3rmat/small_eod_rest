@@ -20,10 +20,10 @@ class AddressDataViewSet(viewsets.ModelViewSet):
     serializer_class = AddressDataSerializer
 
 
-
 class InstitutionViewSet(viewsets.ModelViewSet):
     queryset = Institution.objects.all()
     serializer_class = InstitutionSerializer
+
 
 class CaseViewSet(viewsets.ModelViewSet):
     queryset = Case.objects.all()

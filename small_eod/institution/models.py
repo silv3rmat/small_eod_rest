@@ -2,6 +2,7 @@ from django.db import models
 from generic.models import TimestampUserLogModel
 # from teryt_tree.models import JednostkaAdministracyjna
 
+
 class AddressData(models.Model):
     city = models.CharField(max_length=100)
     voivodeship = models.CharField(max_length=100)

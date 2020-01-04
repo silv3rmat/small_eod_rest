@@ -6,9 +6,9 @@ from institution.models import (
     ExternalIdentifier,
     AdministrativeUnit,
 )
-from case.models import Case, UserRef
+from case.models import Case
 from api.models import Tag
-from dictionary.models import Dictionary
+from dictionary.serializers import DictionarySerializer
 
 from django.contrib.auth import get_user_model
 User = get_user_model()
@@ -31,8 +31,6 @@ class AdministrativeUnitSerializer(serializers.ModelSerializer):
     class Meta:
         model = AdministrativeUnit
         exclude= ['id',]
-    # def create(self, validated_data):
-    #     return AdministrativeUnit.objects.create(**validated_data)
 
 
 class AddressDataSerializer(serializers.HyperlinkedModelSerializer):
@@ -41,24 +39,19 @@ class AddressDataSerializer(serializers.HyperlinkedModelSerializer):
         fields = '__all__'
         read_only_fields = ['id']
 
-    # def create(self, validated_data):
-    #     return AddressData.objects.create(**validated_data)
 
-
-class ExternalIdentifierSerialier(serializers.ModelSerializer):
+class ExternalIdentifierSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ExternalIdentifier
         # fields = '__all__'
         exclude = ['id',]
-    # def create(self, validated_data):
-    #     return ExternalIdentifier.objects.create(**validated_data)
 
 
 class InstitutionSerializer(serializers.ModelSerializer):
 
     address = AddressDataSerializer()
-    external_identifier = ExternalIdentifierSerialier()
+    external_identifier = ExternalIdentifierSerializer()
     administrativeUnit = AdministrativeUnitSerializer()
 
     class Meta:
@@ -101,12 +94,12 @@ class TagSerializer(serializers.ModelSerializer):
 
 class CaseSerializer(serializers.ModelSerializer):
     tag = serializers.ListField()
-
+    dictionary = serializers.RelatedField(many=True, read_only=True)
     class Meta:
         model = Case
-        read_only_fields = ['createdBy', 'modifiedBy', 'createdOn', 'modifiedOn', 'id']
+        read_only_fields = ['createdBy', 'modifiedBy', 'createdOn', 'modifiedOn', 'id', 'letterCount', 'noteCount']
         fields = '__all__'
-
+        # depth = 1
     def create(self, validated_data):
         tags = validated_data.pop('tag')
         new_case = Case.objects.create(**validated_data)

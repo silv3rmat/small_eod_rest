@@ -1,23 +1,26 @@
 from django.db import models
 from generic.models import TimestampUserLogModel
+from case.models import Case
+
+
+class DictTypes(models.TextChoices):
+    WHOSE = "WHOSE", "Do kogo należy sprawa"
+    WSCOPE = "WSCOPE", "Jaki zakres sprawy"
+    ISCOPE = "ISCOPE", "Bezczynność w jakim zakresie"
+    DSCOPE = "DSCOPE", "Decyzja w jakim zakresie"
+    INFOT = "INFOT", "Informacja udzielona w którym momencie"
+    STATUS = "STATUS", "Status"
 
 
 class Dictionary(TimestampUserLogModel):
-    class Types(models.TextChoices):
-        WHOSE = "WHOSE", "whose case"
-        WSCOPE = "WSCOPE", "Jaki zakres sprawy"
-        ISCOPE = "ISCOPE", "Bezczynność w jakim zakresie"
-        DSCOPE = "DSCOPE", "Decyzja w jakim zakresie"
-        INFOT = "INFOT", "Informacja udzielona w którym momencie"
-        STATUS = "STATUS", "Status"
+    type = models.CharField(max_length=6, choices=DictTypes.choices)
+    name = models.CharField(max_length=100)
+    active = models.BooleanField(default=False)
+    case = models.ForeignKey(to=Case, on_delete=models.CASCADE)
 
-    name = models.CharField(max_length=100, choices=Types.choices)
+
+class ChoiceRange(models.Model):
+    type = models.CharField(max_length=6, choices=DictTypes.choices)
     minItems = models.IntegerField(default=1)
     maxItems = models.IntegerField(default=1)
-    active = models.BooleanField(default=True)
-
-
-class DictValue(models.Model):
-    name = models.CharField(max_length=100)
-    value = models.BooleanField(default=False)
-    dictionary = models.ForeignKey(to=Dictionary, on_delete=models.CASCADE)
+    case = models.ForeignKey(to=Case, on_delete=models.CASCADE)

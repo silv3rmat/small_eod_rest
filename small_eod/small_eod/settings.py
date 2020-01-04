@@ -39,17 +39,22 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'rest_framework',
+    'guardian',
     # 'teryt_tree',
 
     'api',
     'user',
+    'generic',
+
     'case',
     'dictionary',
     'channel',
     'institution',
     'collection',
     'files',
-    'generic',
+    'letter',
+    'note',
+    'event'
 ]
 
 MIDDLEWARE = [
@@ -117,6 +122,11 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 
+AUTHENTICATION_BACKENDS = (
+    'django.contrib.auth.backends.ModelBackend',
+    'guardian.backends.ObjectPermissionBackend'
+)
+
 # Internationalization
 # https://docs.djangoproject.com/en/3.0/topics/i18n/
 
@@ -136,4 +146,4 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-AUTH_USER_MODEL = 'user.MyUser'
+AUTH_USER_MODEL = 'user.User'
